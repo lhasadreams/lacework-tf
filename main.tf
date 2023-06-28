@@ -8,19 +8,14 @@ terraform {
 }
 
 provider "aws" {
-  region = var.aws_region
-  access_key = var.aws_access_key_id
-  secret_key = var.aws_secret_access_key
-  token = var.aws_session_token
+  for_each   = { for each in var.aws-provider : each.name => each }
+  region     = each.value.aws_region
+  access_key = each.value.aws_access_key_id
+  secret_key = each.value.aws_secret_access_key
+  token      = each.value.aws_session_token
+  alias      = each.value.aws_alias
 }
 
-provider "aws" {
-  region = var.aws_region
-  access_key = var.aws_access_key_id
-  secret_key = var.aws_secret_access_key
-  token = var.aws_session_token
-  alias = "aws1"
-}
 
 provider "lacework" {
   account    = var.lacework_account
